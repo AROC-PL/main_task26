@@ -1,0 +1,9 @@
+[console_scripts]
+bangun = main_task26.bangun:main
+button = main_task26.button:main
+cek = main_task26.cek:main
+headcontrol = main_task26.main_head_control:main
+jalan = main_task26.crab_walk:main
+jarak = main_task26.main_jarak:main
+maintask = main_task26.main_task:main
+vision = main_task26.main_vision:main

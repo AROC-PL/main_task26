@@ -1,0 +1,68 @@
+running egg_info
+creating ../../build/main_task26/main_task26.egg-info
+writing ../../build/main_task26/main_task26.egg-info/PKG-INFO
+writing dependency_links to ../../build/main_task26/main_task26.egg-info/dependency_links.txt
+writing entry points to ../../build/main_task26/main_task26.egg-info/entry_points.txt
+writing requirements to ../../build/main_task26/main_task26.egg-info/requires.txt
+writing top-level names to ../../build/main_task26/main_task26.egg-info/top_level.txt
+writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+reading manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/aroc/main_task26/build/main_task26/build
+creating /home/aroc/main_task26/build/main_task26/build/lib
+creating /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/motion_PID.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/main_task.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/main_PID.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/bangun.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/main_jarak.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/crab_walk.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/main_head_control.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/__init__.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/button.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+copying main_task26/main_vision.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+running install
+running install_lib
+creating /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/motion_PID.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_task.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_PID.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/bangun.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_jarak.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/crab_walk.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_head_control.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/__init__.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/button.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_vision.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/motion_PID.py to motion_PID.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_task.py to main_task.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_PID.py to main_PID.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/bangun.py to bangun.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_jarak.py to main_jarak.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/crab_walk.py to crab_walk.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_head_control.py to main_head_control.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/button.py to button.cpython-312.pyc
+byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_vision.py to main_vision.cpython-312.pyc
+running install_data
+creating /home/aroc/main_task26/install/main_task26/share/ament_index
+creating /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index
+creating /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index/packages
+copying resource/main_task26 -> /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index/packages
+copying package.xml -> /home/aroc/main_task26/install/main_task26/share/main_task26
+creating /home/aroc/main_task26/install/main_task26/share/main_task26/launch
+copying launch/main_launch.py -> /home/aroc/main_task26/install/main_task26/share/main_task26/launch
+running install_egg_info
+Copying ../../build/main_task26/main_task26.egg-info to /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info
+running install_scripts
+Installing bangun script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing button script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing headcontrol script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing jalan script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing jarak script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing maintask script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+Installing vision script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+writing list of installed files to '/home/aroc/main_task26/build/main_task26/install.log'
