@@ -21,6 +21,7 @@ main_task26/main_jarak.py
 main_task26/main_task.py
 main_task26/main_vision.py
 main_task26/motion_PID.py
+main_task26/tunning_PID.py
 resource/main_task26
 test/test_copyright.py
 test/test_flake8.py

@@ -1,0 +1,33 @@
+[1.876s] Invoking command in '/home/aroc/main_task26/src/main_task26': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data
+[2.485s] running egg_info
+[2.536s] writing ../../build/main_task26/main_task26.egg-info/PKG-INFO
+[2.536s] writing dependency_links to ../../build/main_task26/main_task26.egg-info/dependency_links.txt
+[2.537s] writing entry points to ../../build/main_task26/main_task26.egg-info/entry_points.txt
+[2.537s] writing requirements to ../../build/main_task26/main_task26.egg-info/requires.txt
+[2.539s] writing top-level names to ../../build/main_task26/main_task26.egg-info/top_level.txt
+[2.634s] reading manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[2.635s] adding license file 'LICENSE'
+[2.636s] writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[2.637s] running build
+[2.637s] running build_py
+[2.638s] copying main_task26/main_vision.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[2.639s] running install
+[2.652s] running install_lib
+[2.706s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_vision.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[2.708s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_vision.py to main_vision.cpython-312.pyc
+[2.711s] running install_data
+[2.712s] running install_egg_info
+[2.760s] removing '/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info' (and everything under it)
+[2.761s] Copying ../../build/main_task26/main_task26.egg-info to /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info
+[2.763s] running install_scripts
+[3.079s] Installing bangun script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.079s] Installing button script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.080s] Installing cek script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.080s] Installing headcontrol script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.080s] Installing jalan script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.081s] Installing jarak script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.081s] Installing maintask script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.083s] Installing tunning script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.083s] Installing vision script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.084s] writing list of installed files to '/home/aroc/main_task26/build/main_task26/install.log'
+[3.140s] Invoked command in '/home/aroc/main_task26/src/main_task26' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data

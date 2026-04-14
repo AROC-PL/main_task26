@@ -1,0 +1,74 @@
+[2.577s] Invoking command in '/home/aroc/main_task26/src/main_task26': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data
+[3.241s] running egg_info
+[3.242s] creating ../../build/main_task26/main_task26.egg-info
+[3.290s] writing ../../build/main_task26/main_task26.egg-info/PKG-INFO
+[3.291s] writing dependency_links to ../../build/main_task26/main_task26.egg-info/dependency_links.txt
+[3.291s] writing entry points to ../../build/main_task26/main_task26.egg-info/entry_points.txt
+[3.292s] writing requirements to ../../build/main_task26/main_task26.egg-info/requires.txt
+[3.292s] writing top-level names to ../../build/main_task26/main_task26.egg-info/top_level.txt
+[3.292s] writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[3.387s] reading manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[3.388s] adding license file 'LICENSE'
+[3.388s] writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[3.389s] running build
+[3.389s] running build_py
+[3.389s] creating /home/aroc/main_task26/build/main_task26/build
+[3.389s] creating /home/aroc/main_task26/build/main_task26/build/lib
+[3.390s] creating /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.390s] copying main_task26/motion_PID.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.390s] copying main_task26/main_task.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.390s] copying main_task26/cek.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.390s] copying main_task26/main_PID.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.391s] copying main_task26/bangun.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.391s] copying main_task26/main_jarak.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.391s] copying main_task26/crab_walk.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.391s] copying main_task26/main_head_control.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.392s] copying main_task26/__init__.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.392s] copying main_task26/button.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.392s] copying main_task26/main_vision.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[3.393s] running install
+[3.409s] running install_lib
+[3.455s] creating /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.456s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/motion_PID.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.456s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_task.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.456s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/cek.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.457s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_PID.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.457s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/bangun.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.457s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_jarak.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.457s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/crab_walk.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.458s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_head_control.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.458s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/__init__.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.458s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/button.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.458s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_vision.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[3.460s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/motion_PID.py to motion_PID.cpython-312.pyc
+[3.465s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_task.py to main_task.cpython-312.pyc
+[3.466s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/cek.py to cek.cpython-312.pyc
+[3.467s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_PID.py to main_PID.cpython-312.pyc
+[3.472s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/bangun.py to bangun.cpython-312.pyc
+[3.474s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_jarak.py to main_jarak.cpython-312.pyc
+[3.475s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/crab_walk.py to crab_walk.cpython-312.pyc
+[3.477s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_head_control.py to main_head_control.cpython-312.pyc
+[3.480s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__init__.py to __init__.cpython-312.pyc
+[3.480s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/button.py to button.cpython-312.pyc
+[3.482s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_vision.py to main_vision.cpython-312.pyc
+[3.484s] running install_data
+[3.484s] creating /home/aroc/main_task26/install/main_task26/share/ament_index
+[3.484s] creating /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index
+[3.485s] creating /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index/packages
+[3.485s] copying resource/main_task26 -> /home/aroc/main_task26/install/main_task26/share/ament_index/resource_index/packages
+[3.485s] copying package.xml -> /home/aroc/main_task26/install/main_task26/share/main_task26
+[3.485s] creating /home/aroc/main_task26/install/main_task26/share/main_task26/launch
+[3.485s] copying launch/main_launch.py -> /home/aroc/main_task26/install/main_task26/share/main_task26/launch
+[3.485s] running install_egg_info
+[3.533s] Copying ../../build/main_task26/main_task26.egg-info to /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info
+[3.534s] running install_scripts
+[3.834s] Installing bangun script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.834s] Installing button script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.835s] Installing cek script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.835s] Installing headcontrol script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.835s] Installing jalan script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.836s] Installing jarak script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.836s] Installing maintask script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.836s] Installing vision script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.837s] writing list of installed files to '/home/aroc/main_task26/build/main_task26/install.log'
+[3.885s] Invoked command in '/home/aroc/main_task26/src/main_task26' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data

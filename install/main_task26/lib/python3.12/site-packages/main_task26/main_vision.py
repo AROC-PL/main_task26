@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from std_msgs.msg import String
+from std_msgs.msg import String , Float32
 from cv_bridge import CvBridge
 import cv2
 import time
@@ -43,8 +43,17 @@ class VisionYolo(Node):
             self.image_callback,
             1
         )
+        #publis jarak dengan kamera 
+        self.jarak_pub = self.create_publisher(
+            Float32, 
+            '/vision/jarak_kamera'
+            , 10)
 
         self.get_logger().info("✅ YOLO OpenVINO ROS2 Node Jalan")
+
+        self.FOCAL_LENGTH = 900   # hasil kalibrasi (contoh)
+        self.BALL_DIAMETER = 5  # cm
+        self.KALIBRASI = 10 # cm
 
     def image_callback(self, msg):
         try:
@@ -93,6 +102,15 @@ class VisionYolo(Node):
                         cx = (x1 + x2) // 2
                         cy = (y1 + y2) // 2
 
+                        
+                        jarak = self.vision_jarak(x1, y1, x2, y2)
+                        jarak_final = jarak - self.KALIBRASI
+
+                        if jarak_final is not None:
+                            msg = Float32()
+                            msg.data = float(jarak_final)
+                            self.jarak_pub.publish(msg)
+
                         best_conf = conf
                         best_cx = cx
                         best_cy = cy
@@ -135,6 +153,17 @@ class VisionYolo(Node):
 
         except Exception as e:
             self.get_logger().error(f"Error: {e}")
+
+    def vision_jarak(self, x1, y1, x2, y2):
+        # hitung diameter pixel (pakai lebar bbox)
+        pixel_width = x2 - x1
+
+        if pixel_width <= 0:
+            return None
+
+        distance = (self.FOCAL_LENGTH * self.BALL_DIAMETER) / pixel_width
+        return distance
+
 
 
 def main():

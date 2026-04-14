@@ -7,8 +7,8 @@ from std_msgs.msg import String
 from sensor_msgs.msg import JointState
 from op3_walking_module_msgs.msg import WalkingParam
 
-KANAN = 0.2
-KIRI = -0.2
+KANAN = 0.1
+KIRI = -0.1
 
 
 class GaitController(Node):
@@ -58,7 +58,7 @@ class GaitController(Node):
         param.init_x_offset = 0.010
         param.init_y_offset = 0.015
         param.init_z_offset = 0.035
-        param.hip_pitch_offset = math.radians(9.0)
+        param.hip_pitch_offset = math.radians(12.0)
         param.period_time = 0.95
         param.dsp_ratio = 0.2
         param.step_fb_ratio = 0.28
@@ -97,11 +97,11 @@ class GaitController(Node):
             self.send_param(0.020, 0.016, 0.0)
             self.get_logger().info('Kanan → jalan miring kanan')
         elif self.derajat_kamera < KIRI:
-            self.send_param(0.030, -0.016, 0.0)
+            self.send_param(0.020, -0.016, 0.0)
             self.get_logger().info('Kiri → jalan miring kiri')
         else:
-            self.send_param(0.0, 0.0, 0.0)
-            self.get_logger().info('Tengah → berhenti')
+            self.send_param(0.020, 0.0, 0.0)
+            self.get_logger().info('Tengah → Lurus')
 
 
 def main():

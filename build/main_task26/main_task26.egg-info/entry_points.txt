@@ -6,4 +6,5 @@ headcontrol = main_task26.main_head_control:main
 jalan = main_task26.crab_walk:main
 jarak = main_task26.main_jarak:main
 maintask = main_task26.main_task:main
+tunning = main_task26.tunning_PID:main
 vision = main_task26.main_vision:main

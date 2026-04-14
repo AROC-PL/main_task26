@@ -1,0 +1,33 @@
+[1.900s] Invoking command in '/home/aroc/main_task26/src/main_task26': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data
+[2.515s] running egg_info
+[2.567s] writing ../../build/main_task26/main_task26.egg-info/PKG-INFO
+[2.567s] writing dependency_links to ../../build/main_task26/main_task26.egg-info/dependency_links.txt
+[2.567s] writing entry points to ../../build/main_task26/main_task26.egg-info/entry_points.txt
+[2.568s] writing requirements to ../../build/main_task26/main_task26.egg-info/requires.txt
+[2.568s] writing top-level names to ../../build/main_task26/main_task26.egg-info/top_level.txt
+[2.667s] reading manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[2.668s] adding license file 'LICENSE'
+[2.669s] writing manifest file '../../build/main_task26/main_task26.egg-info/SOURCES.txt'
+[2.669s] running build
+[2.670s] running build_py
+[2.670s] copying main_task26/main_head_control.py -> /home/aroc/main_task26/build/main_task26/build/lib/main_task26
+[2.671s] running install
+[2.685s] running install_lib
+[2.738s] copying /home/aroc/main_task26/build/main_task26/build/lib/main_task26/main_head_control.py -> /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26
+[2.739s] byte-compiling /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_head_control.py to main_head_control.cpython-312.pyc
+[2.744s] running install_data
+[2.744s] running install_egg_info
+[2.794s] removing '/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info' (and everything under it)
+[2.795s] Copying ../../build/main_task26/main_task26.egg-info to /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26-0.0.0-py3.12.egg-info
+[2.797s] running install_scripts
+[3.112s] Installing bangun script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.113s] Installing button script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.113s] Installing cek script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.115s] Installing headcontrol script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.115s] Installing jalan script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.115s] Installing jarak script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.116s] Installing maintask script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.116s] Installing tunning script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.116s] Installing vision script to /home/aroc/main_task26/install/main_task26/lib/main_task26
+[3.117s] writing list of installed files to '/home/aroc/main_task26/build/main_task26/install.log'
+[3.171s] Invoked command in '/home/aroc/main_task26/src/main_task26' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aroc/main_task26/build/main_task26/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/main_task26 build --build-base /home/aroc/main_task26/build/main_task26/build install --record /home/aroc/main_task26/build/main_task26/install.log --single-version-externally-managed install_data

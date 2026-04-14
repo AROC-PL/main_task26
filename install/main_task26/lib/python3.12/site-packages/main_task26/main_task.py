@@ -7,7 +7,7 @@ from main_task26.bangun import FallRecoveryFull
 from main_task26.button import ButtonSoccerNode
 from .main_head_control import HeadControl
 from .main_jarak import JarakCalculation
-from .main_vision import VisionYolo
+# from .main_vision import VisionYolo
 
 
 class MainTask(Node):
@@ -38,7 +38,6 @@ def main(args=None):
     head_control = HeadControl()
     jarak = JarakCalculation()
     
-
     executor = MultiThreadedExecutor()
     executor.add_node(main_node)
     executor.add_node(head_control)
@@ -46,7 +45,6 @@ def main(args=None):
     executor.add_node(bangun_node)
     executor.add_node(button_node)
     
-
     try:
         executor.spin()
     except KeyboardInterrupt:
@@ -60,7 +58,6 @@ def main(args=None):
         bangun_node.destroy_node()
         button_node.destroy_node()
         rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

@@ -18,37 +18,27 @@ class HeadListener(Node):
 
         self.get_logger().info('Menunggu data head...')
         self.derajat_kamera = 0.0 
+        self.head_tilt = 0.0
 
     def joint_callback(self, msg: JointState):
-        # Ambil nilai head_pan dari JointState
+        head_pan_found = False
+        head_tilt_found = False
+
         for i, name in enumerate(msg.name):
             if name == 'head_pan':
                 self.derajat_kamera = msg.position[i]
-                self.get_logger().info(
-                    f'Head Pan = {self.derajat_kamera:.3f}'
-                )
+                head_pan_found = True
 
-        # Panggil logika jalan
-        self.walk_parameter()
+            elif name == 'head_tilt':
+                self.head_tilt = msg.position[i]
+                head_tilt_found = True
 
-    def walk_parameter(self):
-        if self.derajat_kamera > KANAN:
-            self.get_logger().info('Kanan → jalan miring kanan')
+        # Print kalau dua-duanya ketemu
+        if head_pan_found or head_tilt_found:
             self.get_logger().info(
-                f"derajat kamera : {self.derajat_kamera:.3f}"
+                f'Head Pan = {self.derajat_kamera:.3f} | Head Tilt = {self.head_tilt:.3f}'
             )
 
-        elif self.derajat_kamera < KIRI:
-            self.get_logger().info('Kiri → jalan miring kiri')
-            self.get_logger().info(
-                f"derajat kamera : {self.derajat_kamera:.3f}"
-            )
-
-        else:
-            self.get_logger().info('Tengah → berhenti')
-            self.get_logger().info(
-                f"derajat kamera : {self.derajat_kamera:.3f}"
-            )
 
 def main(args=None):
     rclpy.init(args=args)

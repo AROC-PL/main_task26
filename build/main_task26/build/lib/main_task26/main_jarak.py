@@ -2,13 +2,8 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Float32
 import math
 
-tinggiRobot = 50
-sudutKamera = 0.0
-sudutMati = 1.575
-kalibrasiJarak = 30 
 
 class JarakCalculation(Node):
     def __init__(self):
@@ -20,22 +15,18 @@ class JarakCalculation(Node):
             self.joint_callback,
             10
         )
-        self.jarak_pub = self.create_publisher(
-            Float32,
-            '/jarak_bola',
-            10
-        )
+        
 
-        self.tinggi_robot = tinggiRobot
-        self.sudut_kamera = sudutKamera
-        self.sudut_mat = sudutMati
-        self.kalibrasi_jarak =kalibrasiJarak  
+        self.tinggi_robot = 45
+        self.sudut_kamera = 0.0
+        self.sudut_mat = 1.575
+        self.kalibrasi_jarak =60    #cm 
 
     def joint_callback(self, msg):
         for i, name in enumerate(msg.name):
             if name == "head_tilt":
                 self.sudut_kamera = msg.position[i]
-                # self.get_logger().info(f"Head tilt: {self.sudut_kamera}")
+                self.get_logger().info(f"Head tilt: {self.sudut_kamera}")
                 self.hitung_jarak()
 
     def hitung_jarak(self):
@@ -46,13 +37,10 @@ class JarakCalculation(Node):
         # radian = math.radians(sudut_rad)
         jarak = (self.tinggi_robot*math.tan(sudut_rad))
 
-        # print(f"sudutrad = {sudut_rad}")
+        print(f"sudutrad = {sudut_rad}")
         # print(f"radian = {radian}")
         jarak_final = jarak-self.kalibrasi_jarak 
-        # print(f"jarak = {jarak_final}")
-        msg = Float32()
-        msg.data = jarak_final
-        self.jarak_pub.publish(msg)
+        print(f"jarak|| = {jarak_final}")
 
 def main(args=None):
     rclpy.init(args=args)

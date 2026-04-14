@@ -6,6 +6,7 @@
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_jarak.py
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/crab_walk.py
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_head_control.py
+/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/tunning_PID.py
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__init__.py
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/button.py
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/main_vision.py
@@ -17,6 +18,7 @@
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/main_jarak.cpython-312.pyc
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/crab_walk.cpython-312.pyc
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/main_head_control.cpython-312.pyc
+/home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/tunning_PID.cpython-312.pyc
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/__init__.cpython-312.pyc
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/button.cpython-312.pyc
 /home/aroc/main_task26/install/main_task26/lib/python3.12/site-packages/main_task26/__pycache__/main_vision.cpython-312.pyc
@@ -37,4 +39,5 @@
 /home/aroc/main_task26/install/main_task26/lib/main_task26/jalan
 /home/aroc/main_task26/install/main_task26/lib/main_task26/jarak
 /home/aroc/main_task26/install/main_task26/lib/main_task26/maintask
+/home/aroc/main_task26/install/main_task26/lib/main_task26/tunning
 /home/aroc/main_task26/install/main_task26/lib/main_task26/vision
