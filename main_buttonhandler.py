@@ -115,7 +115,7 @@ class ButtonSoccerNode(GaitController):
         button = msg.data
         now = time.time()
 
-        if button == 'user':
+        if button == 'start':
             if now - self.last_press_time < self.double_click:
                 self.stop_all()
                 self.current_mode = None
@@ -123,13 +123,13 @@ class ButtonSoccerNode(GaitController):
                 return
             
             self.last_press_time = now
-            self.get_logger().info('USER → Jalan Diagonal')
+            self.get_logger().info('START → Jalan Diagonal')
         
             self.stop_all()
             self.start_all()
                 
 
-        elif button == 'start':
+        elif button == 'user':
             self.stop_all()
             self.get_logger().info("USER pressed → Init Pose")
             if self.is_walking:
