@@ -83,14 +83,14 @@ class HeadControl(Node):
         # TILT
         self.pid[HEAD_TILT].setConstant(Kp=0.35, Ki=0.01, Kd=0.35)
         self.pid[HEAD_TILT].setTime(Ti=10.0, Td=10.0)
-        self.pid[HEAD_TILT].setRange(0, 480, -2.0, 2.0)
-        self.pid[HEAD_TILT].setSetPoints(240)
+        self.pid[HEAD_TILT].setRange(0, 337, -1.5, -0.2)
+        self.pid[HEAD_TILT].setSetPoints(168.5)
 
         # PAN
-        self.pid[HEAD_PAN].setConstant(Kp=0.5, Ki=0.02, Kd=0.15)
+        self.pid[HEAD_PAN].setConstant(Kp=0.5,Ki=0.02, Kd=0.15)
         self.pid[HEAD_PAN].setTime(Ti=10.0, Td=10.0)
-        self.pid[HEAD_PAN].setRange(0, 640, -1.2, 1.2)
-        self.pid[HEAD_PAN].setSetPoints(320)
+        self.pid[HEAD_PAN].setRange(0, 450, -1.5, 1.2)
+        self.pid[HEAD_PAN].setSetPoints(225.0)
 
         for i in range(2):
             self.pid[i].Init()
@@ -193,6 +193,7 @@ class HeadControl(Node):
             if self.head_mode != "track":
                 self.enter_track_mode()
             self.track_head()
+        
     # ==========================================================
     # OBJECT CALLBACK
     # ==========================================================
@@ -273,7 +274,8 @@ class HeadControl(Node):
     # ==========================================================
     def scan_head(self):
 
-        self.pan += 0.05 * self.scan_dir
+        # self.pan += 0.05 * self.scan_dir
+        self.pan = 0.05 * self.scan_dir
 
         if self.pan >= 1.2:
             self.pan = 1.2

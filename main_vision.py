@@ -24,8 +24,13 @@ class VisionYolo(Node):
 
         #MODEL HARUS DI CONVERT DI PC YANG AKAN DI GUNAKAN!!!!! WAJIB !!!!
 
+        # self.model = YOLO(
+        #     "/home/aroc/main_task26/main_task26/best_openvino_model",
+        #     task="detect"
+        # )
+
         self.model = YOLO(
-            "/home/aroc/main_task26/main_task26/best_openvino_model",
+            "/home/aroc/main_task26/main_task26/model/best_openvino_model",
             task="detect"
         )
 
@@ -182,6 +187,7 @@ class VisionYolo(Node):
             return None
 
         distance = (self.FOCAL_LENGTH * self.BALL_DIAMETER) / pixel_width
+        self.get_logger().info(f"Distance: {distance:.2f} cm") 
         return distance
 
 

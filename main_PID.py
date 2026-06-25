@@ -210,8 +210,8 @@ class PIDControl:
         deltaError = self.error - self.prevError  # de
         self.error = (self.Sp - FeedBack) / (self.InRangeMax - self.InRangeMin)  #
         self.cP = self.error
-        # self.cI += error * deltaTime
-        # self.cD = (deltaError / deltaTime) if deltaTime > 0 else 0
+        self.cI += self.error * deltaTime
+        self.cD = (deltaError / deltaTime) if deltaTime > 0 else 0
         self.cI = self.sumError
         self.cD = deltaError
         self.Output = sum([self.Kp * self.cP,

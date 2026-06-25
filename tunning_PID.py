@@ -12,7 +12,12 @@ from std_msgs.msg import String
 from sensor_msgs.msg import JointState
 
 import time
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.animation import FuncAnimation
+from collections import deque
 
 # ─── FILE SAVE ───────────────────────────────────────
 SAVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pid_config.json")
@@ -22,13 +27,15 @@ DEFAULTS = {
     "tilt": {"kp": 1.0, "ki": 0.0, "kd": 0.20},
 }
 
+# Buffer maksimal data yang ditampilkan di grafik (dalam poin)
+MAX_POINTS = 500
+
 def load_config():
     """Baca nilai terakhir dari file. Kalau belum ada, pakai DEFAULT."""
     if os.path.exists(SAVE_FILE):
         try:
             with open(SAVE_FILE, "r") as f:
                 data = json.load(f)
-            # validasi struktur
             for axis in ("pan", "tilt"):
                 for param in ("kp", "ki", "kd"):
                     float(data[axis][param])
@@ -53,27 +60,45 @@ class PIDPublisher(Node):
         super().__init__("pid_tuner_gui_node")
         self.pub = self.create_publisher(String, "/pid_params", 10)
         self.start_time  = time.time()
-        self.time_data   = []
-        self.actual_pan  = []
-        self.actual_tilt = []
+
+        # Gunakan deque agar buffer terbatas dan efisien
+        self.time_data   = deque(maxlen=MAX_POINTS)
+        self.actual_pan  = deque(maxlen=MAX_POINTS)
+        self.actual_tilt = deque(maxlen=MAX_POINTS)
+
         self.latest_pan  = 0.0
         self.latest_tilt = 0.0
+        self._lock       = threading.Lock()
+
         self.create_subscription(
             JointState, "/robotis/present_joint_states", self.joint_callback, 10
         )
 
     def joint_callback(self, msg):
-        now = time.time() - self.start_time
+        # Waktu dalam MILIDETIK
+        now_ms = (time.time() - self.start_time) * 1000.0
         try:
             pi = msg.name.index("head_pan")
             ti = msg.name.index("head_tilt")
-            self.latest_pan  = msg.position[pi]
-            self.latest_tilt = msg.position[ti]
-            self.time_data.append(now)
-            self.actual_pan.append(self.latest_pan)
-            self.actual_tilt.append(self.latest_tilt)
+            pan_val  = msg.position[pi]
+            tilt_val = msg.position[ti]
+            with self._lock:
+                self.latest_pan  = pan_val
+                self.latest_tilt = tilt_val
+                self.time_data.append(now_ms)
+                self.actual_pan.append(pan_val)
+                self.actual_tilt.append(tilt_val)
         except ValueError:
             pass
+
+    def get_plot_data(self):
+        """Ambil snapshot data secara thread-safe."""
+        with self._lock:
+            return (
+                list(self.time_data),
+                list(self.actual_pan),
+                list(self.actual_tilt),
+            )
 
     def send(self, pan: dict, tilt: dict):
         payload = json.dumps({"pan": pan, "tilt": tilt})
@@ -83,21 +108,123 @@ class PIDPublisher(Node):
         self.get_logger().info(f"Sent: {payload}")
 
 
+# ─── REALTIME PLOT WINDOW ────────────────────────────
+class RealtimePlotWindow(tk.Toplevel):
+    """Jendela terpisah dengan grafik realtime (embedded matplotlib)."""
+
+    UPDATE_INTERVAL_MS = 200  # refresh setiap 200 ms
+
+    def __init__(self, parent, ros_node: PIDPublisher):
+        super().__init__(parent)
+        self.ros_node = ros_node
+        self.title("Grafik Realtime — Head Servo")
+        self.configure(bg="#F5F5F3")
+        self.resizable(True, True)
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+        self._running = True
+
+        self._build_plot()
+        self._schedule_update()
+
+    def _build_plot(self):
+        BG  = "#F5F5F3"
+        fig_bg = "#FFFFFF"
+
+        self._fig, (self._ax1, self._ax2) = plt.subplots(
+            2, 1, figsize=(8, 5), tight_layout=True, facecolor=fig_bg
+        )
+
+        for ax in (self._ax1, self._ax2):
+            ax.set_facecolor(fig_bg)
+            ax.grid(True, color="#E0E0E0", linewidth=0.8)
+            ax.tick_params(labelsize=9)
+
+        self._line_pan,  = self._ax1.plot([], [], color="#185FA5", linewidth=1.5, label="PAN actual")
+        self._line_tilt, = self._ax2.plot([], [], color="#3B6D11", linewidth=1.5, label="TILT actual")
+
+        self._ax1.set_ylabel("Posisi (rad)", fontsize=9)
+        self._ax1.legend(loc="upper right", fontsize=8)
+        self._ax1.set_xlabel("Waktu (ms)", fontsize=9)
+
+        self._ax2.set_ylabel("Posisi (rad)", fontsize=9)
+        self._ax2.legend(loc="upper right", fontsize=8)
+        self._ax2.set_xlabel("Waktu (ms)", fontsize=9)
+
+        self._fig.suptitle("Posisi Servo Head — Realtime", fontsize=11, y=0.98)
+
+        # Tombol reset data
+        ctrl = tk.Frame(self, bg=BG)
+        ctrl.pack(fill="x", padx=10, pady=(6, 0))
+        tk.Button(
+            ctrl, text="⏱ Restart Timer", command=self._reset_data,
+            font=("Arial", 9, "bold"), bg="#185FA5", fg="white",
+            relief="flat", padx=8, pady=4, cursor="hand2"
+        ).pack(side="left")
+        self._info_var = tk.StringVar(value="Menunggu data...")
+        tk.Label(ctrl, textvariable=self._info_var,
+                 font=("Arial", 9), fg="#888", bg=BG).pack(side="left", padx=8)
+
+        self._canvas = FigureCanvasTkAgg(self._fig, master=self)
+        self._canvas.get_tk_widget().pack(fill="both", expand=True, padx=10, pady=6)
+        self._canvas.draw()
+
+    def _reset_data(self):
+        """Bersihkan buffer data dan restart timer di node ROS."""
+        with self.ros_node._lock:
+            self.ros_node.time_data.clear()
+            self.ros_node.actual_pan.clear()
+            self.ros_node.actual_tilt.clear()
+            self.ros_node.start_time = time.time()
+        self._info_var.set(f"Timer di-restart — {time.strftime('%H:%M:%S')}")
+
+    def _schedule_update(self):
+        if self._running:
+            self._update_plot()
+            self.after(self.UPDATE_INTERVAL_MS, self._schedule_update)
+
+    def _update_plot(self):
+        t_data, pan_data, tilt_data = self.ros_node.get_plot_data()
+        n = len(t_data)
+
+        if n < 2:
+            self._info_var.set(f"Menunggu data... ({n} titik)")
+            return
+
+        self._info_var.set(f"{n} titik  |  terakhir: {t_data[-1]:.0f} ms")
+
+        self._line_pan.set_data(t_data, pan_data)
+        self._line_tilt.set_data(t_data, tilt_data)
+
+        # Auto-scale sumbu
+        for ax, ydata in [(self._ax1, pan_data), (self._ax2, tilt_data)]:
+            ax.set_xlim(t_data[0], max(t_data[-1], t_data[0] + 500))
+            mn, mx = min(ydata), max(ydata)
+            pad = max((mx - mn) * 0.15, 0.05)
+            ax.set_ylim(mn - pad, mx + pad)
+
+        self._canvas.draw_idle()
+
+    def _on_close(self):
+        self._running = False
+        self.destroy()
+
+
 # ─── GUI ─────────────────────────────────────────────
 class PIDTunerApp(tk.Tk):
 
     SLIDER_MIN = 0.0
     SLIDER_MAX = 5.0
-    SAVE_DELAY = 500   # ms debounce sebelum tulis file
+    SAVE_DELAY = 500
 
     def __init__(self, ros_node: PIDPublisher):
         super().__init__()
         self.ros_node = ros_node
+        self._plot_window = None  # referensi ke jendela plot (jika terbuka)
+
         self.title("PID Tuner — Head Control")
         self.resizable(False, False)
         self.configure(bg="#F5F5F3")
 
-        # Load dari file (atau default kalau belum ada)
         cfg = load_config()
 
         self._vars = {
@@ -111,7 +238,7 @@ class PIDTunerApp(tk.Tk):
         self._status  = tk.StringVar(value="● Siap")
         self._save_indicator = tk.StringVar(value="")
 
-        self._save_job = None   # debounce handle
+        self._save_job = None
 
         self._build_ui()
         self._update_display()
@@ -122,7 +249,6 @@ class PIDTunerApp(tk.Tk):
         tk.Label(self, text="PID Tuner — Head Control",
                  font=("Arial", 13, "bold"), bg=BG).pack(padx=16, pady=(12,2), anchor="w")
 
-        # Baris subtitle + indikator save
         sub = tk.Frame(self, bg=BG)
         sub.pack(padx=16, fill="x")
         tk.Label(sub, text="Atur Kp / Ki / Kd tanpa colcon build",
@@ -224,9 +350,9 @@ class PIDTunerApp(tk.Tk):
         frame = tk.Frame(self, bg=BG)
         frame.pack(padx=14, pady=12)
         for text, cmd, bg, fg in [
-            ("Reset Default",  self._reset,  "#E0DDD8", "#333"),
-            ("Plot Grafik",    self._plot,   "#E0DDD8", "#333"),
-            ("Kirim ke Robot", self._send,   "#185FA5", "white"),
+            ("Reset Default",  self._reset,       "#E0DDD8", "#333"),
+            ("Plot Realtime",  self._open_plot,   "#E0DDD8", "#333"),
+            ("Kirim ke Robot", self._send,         "#185FA5", "white"),
         ]:
             tk.Button(frame, text=text, command=cmd,
                       font=("Arial", 10, "bold"), bg=bg, fg=fg,
@@ -239,7 +365,6 @@ class PIDTunerApp(tk.Tk):
             val = round(var.get(), 3)
             self._summary_vars[axis][param].set(f"{val:.3f}")
 
-            # Print ke console
             pan_kp  = round(self._vars["pan"]["kp"].get(),  3)
             pan_ki  = round(self._vars["pan"]["ki"].get(),  3)
             pan_kd  = round(self._vars["pan"]["kd"].get(),  3)
@@ -252,7 +377,6 @@ class PIDTunerApp(tk.Tk):
                 end="\r"
             )
 
-            # Debounce: tunda save 500ms agar tidak spam tulis saat slider gerak
             if self._save_job:
                 self.after_cancel(self._save_job)
             self._save_indicator.set("💾 menyimpan...")
@@ -262,7 +386,6 @@ class PIDTunerApp(tk.Tk):
             pass
 
     def _do_save(self):
-        """Tulis file JSON — dipanggil setelah debounce selesai."""
         data = {
             axis: {p: round(self._vars[axis][p].get(), 4) for p in ("kp","ki","kd")}
             for axis in ("pan", "tilt")
@@ -291,10 +414,13 @@ class PIDTunerApp(tk.Tk):
             for axis in ("pan", "tilt")
         }
 
-    # ─── REALTIME UPDATE ─────────────────────────────
+    # ─── REALTIME UPDATE display servo ───────────────
     def _update_display(self):
-        self.pan_val.set(f"{self.ros_node.latest_pan:.3f} rad")
-        self.tilt_val.set(f"{self.ros_node.latest_tilt:.3f} rad")
+        with self.ros_node._lock:
+            pan  = self.ros_node.latest_pan
+            tilt = self.ros_node.latest_tilt
+        self.pan_val.set(f"{pan:.3f} rad")
+        self.tilt_val.set(f"{tilt:.3f} rad")
         self.after(100, self._update_display)
 
     # ─── ACTIONS ─────────────────────────────────────
@@ -321,22 +447,13 @@ class PIDTunerApp(tk.Tk):
         self._status.set("● Reset ke nilai default")
         print("\n[RESET] Nilai dikembalikan ke default.")
 
-    def _plot(self):
-        t_data    = self.ros_node.time_data
-        pan_data  = self.ros_node.actual_pan
-        tilt_data = self.ros_node.actual_tilt
-
-        if len(t_data) < 5:
-            messagebox.showinfo("Info", "Data belum cukup, tunggu beberapa detik.")
-            return
-
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 5), tight_layout=True)
-        ax1.plot(t_data, pan_data,  color="#185FA5", label="PAN actual")
-        ax1.set_ylabel("rad"); ax1.legend(); ax1.grid(True)
-        ax2.plot(t_data, tilt_data, color="#3B6D11", label="TILT actual")
-        ax2.set_ylabel("rad"); ax2.set_xlabel("Time (s)"); ax2.legend(); ax2.grid(True)
-        fig.suptitle("Posisi Servo Head — Real-time Log")
-        plt.show()
+    def _open_plot(self):
+        """Buka atau fokuskan jendela plot realtime."""
+        if self._plot_window is not None and self._plot_window.winfo_exists():
+            self._plot_window.lift()
+            self._plot_window.focus_set()
+        else:
+            self._plot_window = RealtimePlotWindow(self, self.ros_node)
 
 
 # ─── MAIN ────────────────────────────────────────────
