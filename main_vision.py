@@ -7,9 +7,12 @@ import cv2
 import time
 from ultralytics import YOLO
 from .kalman_filter import KalmanFilter2D
+from .ema_filter import EMAFilter
 
 
 kf = KalmanFilter2D()
+ema_x = EMAFilter(alpha=0.2)
+ema_y = EMAFilter(alpha=0.2)
 
 SET_CONF = 0.6
 IMG_WIDTH = 450
@@ -58,17 +61,17 @@ class VisionYolo(Node):
             '/vision/jarak_kamera'
             , 10)
         
-        # self.hasil_filter = self.create_publisher(
-        #     String,
-        #     '/Hasil/Filter',
-        #     10
-        # )
+        self.hasil_filter = self.create_publisher(
+            String,
+            '/Hasil/Filter',
+            10
+        )
 
         self.get_logger().info("✅ YOLO OpenVINO ROS2 Node Jalan")
 
         self.FOCAL_LENGTH = 900   # hasil kalibrasi (contoh)
         self.BALL_DIAMETER = 5  # cm
-        self.KALIBRASI = 10 # cm
+        self.KALIBRASI = 7 # cm
 
     def image_callback(self, msg):
         try:
@@ -139,16 +142,21 @@ class VisionYolo(Node):
                 )
                 # kf.predict()
                 # best_cx,best_cy =kf.update(best_cx,best_cy)
+                best_cx = int(round(ema_x.update(best_cx)))
+                best_cy = int(round(ema_y.update(best_cy)))
+                self.get_logger().info(
+                    f"BEST DETECTION FILTER ||||| conf={best_conf:.2f} | center=({best_cx},{best_cy})"
+                )
                 msg_out = String()
                 msg_out.data = f"{best_cx},{best_cy}"
                 self.obj_pub.publish(msg_out)
             ########################
             #FILTER
-                # kf.predict()
-                # x,y =kf.update(best_cx,best_cy)
-                # msg_out_filter = String()
-                # msg_out_filter.data= f"{x},{y}"
-                # self.hasil_filter.publish(msg_out_filter)   
+                kf.predict()
+                x,y =kf.update(best_cx,best_cy)
+                msg_out_filter = String()
+                msg_out_filter.data= f"{x},{y}"
+                self.hasil_filter.publish(msg_out_filter)   
         
 
         

@@ -81,13 +81,13 @@ class HeadControl(Node):
         self.pid = [PIDControl() for _ in range(2)]
 
         # TILT
-        self.pid[HEAD_TILT].setConstant(Kp=0.35, Ki=0.01, Kd=0.35)
+        self.pid[HEAD_TILT].setConstant(Kp=1.5, Ki=0.09, Kd=0.19)
         self.pid[HEAD_TILT].setTime(Ti=10.0, Td=10.0)
         self.pid[HEAD_TILT].setRange(0, 337, -1.5, -0.2)
         self.pid[HEAD_TILT].setSetPoints(168.5)
 
         # PAN
-        self.pid[HEAD_PAN].setConstant(Kp=0.5,Ki=0.02, Kd=0.15)
+        self.pid[HEAD_PAN].setConstant(Kp=0.7,Ki=0.15, Kd=0.2)
         self.pid[HEAD_PAN].setTime(Ti=10.0, Td=10.0)
         self.pid[HEAD_PAN].setRange(0, 450, -1.5, 1.2)
         self.pid[HEAD_PAN].setSetPoints(225.0)
