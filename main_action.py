@@ -14,6 +14,9 @@ KANAN             = 0.1
 KIRI              = -0.1
 
 
+# walking nasional
+
+
 class FallRecoveryFull(Node):
     def __init__(self):
         super().__init__('fall_recovery_full')
