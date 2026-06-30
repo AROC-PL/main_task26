@@ -36,23 +36,21 @@ class MainTask(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    #vision main vision jangan taruh sini 
-    
     main_node = MainTask()
-    # bangun_node = FallRecoveryFull()
+    bangun_node = FallRecoveryFull()
     button_node = ButtonSoccerNode()
-    # head_control = HeadControl()
-    # kick_control = KickDecision()
+    head_control = HeadControl()
+    kick_control = KickDecision()
 
     jarak = JarakCalculation()
     
     executor = MultiThreadedExecutor()
     executor.add_node(main_node)
-    # executor.add_node(head_control)
+    executor.add_node(head_control)
     executor.add_node(jarak)
-    # executor.add_node(bangun_node)
+    executor.add_node(bangun_node)
     executor.add_node(button_node)
-    # executor.add_node(kick_control)
+    executor.add_node(kick_control)
     
     try:
         executor.spin()
@@ -62,11 +60,11 @@ def main(args=None):
         button_node.stop_all()
         executor.shutdown()   
         main_node.destroy_node()
-        # head_control.destroy_node()
+        head_control.destroy_node()
         jarak.destroy_node()
-        # bangun_node.destroy_node()
+        bangun_node.destroy_node()
         button_node.destroy_node()
-        # kick_control.destroy_node()
+        kick_control.destroy_node()
         rclpy.shutdown()
 
 if __name__ == '__main__':

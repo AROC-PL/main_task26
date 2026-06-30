@@ -34,7 +34,7 @@ class ButtonSoccerNode(GaitController):
         
         self.create_subscription(
             String,
-            '/robot_state',
+            '/communication/robot_state',
             self.state_callback,
             10
         )
@@ -42,12 +42,12 @@ class ButtonSoccerNode(GaitController):
         self.is_walking = False
         self.current_mode = 'walking'
         self.diagonal_timer = None
+        self.robot_state = "NORMAL"
 
         self.get_logger().info('Button Controller Ready')
 
         self.last_press_time = 0
         self.double_click = 0.5
-        self.current_mode = None
 
     # ------------------------------------------------------------------ #
     #  Module helpers                                                       #
@@ -75,7 +75,7 @@ class ButtonSoccerNode(GaitController):
 
     def state_callback(self, msg):
         self.robot_state = msg.data
-        if self.robot_state == "RECOVER" or "KICK":
+        if self.robot_state == "RECOVER" or self.robot_state == "KICK":
             self.stop_all()
 
         elif self.robot_state == "NORMAL":
@@ -153,7 +153,6 @@ class ButtonSoccerNode(GaitController):
 
             self.current_mode = 'walking'
             
-            self.executor.add_node(HeadControl())
             self.get_logger().info('MODE → Walking Mode')
             self.enable_walking_mode()
 
@@ -164,8 +163,6 @@ class ButtonSoccerNode(GaitController):
     def start_all(self):
         self.current_mode = 'walking'
         self.start_diagonal_mode()
-        self.executor.add_node(GaitController())  
-        self.executor.add_node(FallRecoveryFull())
 
 def main(args=None):
     rclpy.init(args=args)

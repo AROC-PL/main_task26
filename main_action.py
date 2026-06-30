@@ -59,9 +59,12 @@ class FallRecoveryFull(Node):
         self.acc_buffer = []
         self.is_running = False
         self._reset_timer = None
+        self._head_timer = None
         self.derajat_kamera = 0.0
         self.jarak_bola = 0.0
         self.is_walking = False
+        self.kick_last_time = 0.0
+        self.kick_cooldown = 2.0
         self.get_logger().info("Fall Recovery READY (no more chaos)")
 
     # ───────── IMU CALLBACK ─────────
@@ -99,7 +102,10 @@ class FallRecoveryFull(Node):
         if self.is_running:
             return
 
-        # validasi data
+        now = time.time()
+        if now - self.kick_last_time < self.kick_cooldown:
+            return
+
         if self.jarak_bola == 0.0:
             self.get_logger().info("Menunggu jarak bola...")
             return
@@ -109,7 +115,7 @@ class FallRecoveryFull(Node):
         # )
 
         # cek jarak dulu
-        if self.jarak_bola < 29:
+        if self.jarak_bola < 26:
 
             # kanan
             if self.derajat_kamera > KANAN:
@@ -132,15 +138,17 @@ class FallRecoveryFull(Node):
 
     def start_kicking(self, page):
         if self.is_walking:
-            self.stop_walking
+            self.stop_walking()
+        self.is_running = True
         self.publish_state("KICK")
         time.sleep(0.5)
 
         # panggil action
         self.set_action_module()
+        time.sleep(0.3)
         self.do_action(page)
 
-        self.create_timer(0.5, self.enable_head_once)
+        self._head_timer = self.create_timer(0.5, self.enable_head_once)
 
         if self._reset_timer:
             self._reset_timer.cancel()
@@ -154,18 +162,19 @@ class FallRecoveryFull(Node):
     def start_recovery(self, page):
         if self.is_walking:
             self.stop_walking()
-        # 🔥 publish state
+        self.is_running = True
         self.publish_state("RECOVER")
         time.sleep(0.3)
 
         # aktifkan action module
         self.set_action_module()
+        time.sleep(0.3)
 
         # kirim action
         self.do_action(page)
 
         # setelah sedikit delay → balik ke head module
-        self.create_timer(0.5, self.enable_head_once)
+        self._head_timer = self.create_timer(0.5, self.enable_head_once)
 
         # timer selesai recovery
         if self._reset_timer:
@@ -181,11 +190,16 @@ class FallRecoveryFull(Node):
         self.get_logger().info("Recovery selesai → balik NORMAL")
 
         self.is_running = False
+        self.kick_last_time = time.time()
         self.publish_state("NORMAL")
 
         if self._reset_timer:
             self._reset_timer.cancel()
             self._reset_timer = None
+
+        if self._head_timer:
+            self._head_timer.cancel()
+            self._head_timer = None
 
     # ───────── MODULE CONTROL ─────────
     def set_action_module(self):
@@ -198,6 +212,9 @@ class FallRecoveryFull(Node):
         msg.data = "head_control_module"
         self.module_pub.publish(msg)
         self.get_logger().info("Head module ON")
+        if self._head_timer:
+            self._head_timer.cancel()
+            self._head_timer = None
 
     def stop_walking(self):
         cmd_msg = String()
