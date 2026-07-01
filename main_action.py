@@ -4,6 +4,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Int32, String, Float32
 from sensor_msgs.msg import JointState
+from geometry_msgs.msg import Twist
 
 ACTION_PAGE_FRONT = 142
 ACTION_PAGE_BACK  = 143
@@ -12,9 +13,6 @@ FILTER_SIZE       = 5
 ACTION_DURATION   = 1.0
 KANAN             = 0.1
 KIRI              = -0.1
-
-
-# walking nasional
 
 
 class FallRecoveryFull(Node):
@@ -65,6 +63,8 @@ class FallRecoveryFull(Node):
         self.derajat_kamera = 0.0
         self.jarak_bola = 0.0
         self.is_walking = False
+        self.kick_last_time = 0.0
+        self.kick_cooldown = 2.0  # inisialisasi waktu terakhir kick
         self.get_logger().info("Fall Recovery READY (no more chaos)")
 
     # ───────── IMU CALLBACK ─────────
@@ -101,6 +101,10 @@ class FallRecoveryFull(Node):
     def kick(self):
         if self.is_running:
             return
+        
+        now = time.time()
+        if now - self.kick_last_time < self.kick_cooldown:
+            return
 
         # validasi data
         if self.jarak_bola == 0.0:
@@ -134,13 +138,15 @@ class FallRecoveryFull(Node):
             self.get_logger().info("Bola masih jauh")
 
     def start_kicking(self, page):
+        self.is_running = True
         if self.is_walking:
-            self.stop_walking
+            self.stop_walking()
         self.publish_state("KICK")
         time.sleep(0.5)
 
         # panggil action
         self.set_action_module()
+        time.sleep(0.3)
         self.do_action(page)
 
         self.create_timer(0.5, self.enable_head_once)
@@ -152,9 +158,11 @@ class FallRecoveryFull(Node):
             ACTION_DURATION,
             self.finish_recovery
         )
+        
 
     # ───────── START RECOVERY ─────────
     def start_recovery(self, page):
+        self.is_running = True
         if self.is_walking:
             self.stop_walking()
         # 🔥 publish state
@@ -163,7 +171,7 @@ class FallRecoveryFull(Node):
 
         # aktifkan action module
         self.set_action_module()
-
+        time.sleep(0.5)  # kasih waktu module aktif
         # kirim action
         self.do_action(page)
 
@@ -184,7 +192,10 @@ class FallRecoveryFull(Node):
         self.get_logger().info("Recovery selesai → balik NORMAL")
 
         self.is_running = False
+        self.kick_last_time = time.time()
         self.publish_state("NORMAL")
+
+        # self.start_walking()
 
         if self._reset_timer:
             self._reset_timer.cancel()
@@ -208,6 +219,19 @@ class FallRecoveryFull(Node):
         self.walking_command_pub.publish(cmd_msg)
         self.is_walking = False
 
+    # def enable_walking(self):
+    #     msg = String()
+    #     msg.data = "walking_module"
+    #     self.module_pub.publish(msg)
+
+    #     time.sleep(0.3)
+
+    #     cmd = String()
+    #     cmd.data = "start"
+    #     self.walking_command_pub.publish(cmd)
+
+    #     self.is_walking = True
+
     def do_action(self, page):
         msg = Int32()
         msg.data = page
@@ -218,4 +242,3 @@ class FallRecoveryFull(Node):
         msg = String()
         msg.data = state
         self.state_pub.publish(msg)
-

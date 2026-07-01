@@ -37,20 +37,19 @@ def main(args=None):
     rclpy.init(args=args)
 
     #vision main vision jangan taruh sini 
-    
+    executor = MultiThreadedExecutor()
     main_node = MainTask()
-    # bangun_node = FallRecoveryFull()
-    button_node = ButtonSoccerNode()
+    bangun_node = FallRecoveryFull()
+    # button_node = ButtonSoccerNode()
     # head_control = HeadControl()
     # kick_control = KickDecision()
 
     jarak = JarakCalculation()
-    
-    executor = MultiThreadedExecutor()
+    button_node = ButtonSoccerNode()
     executor.add_node(main_node)
     # executor.add_node(head_control)
     executor.add_node(jarak)
-    # executor.add_node(bangun_node)
+    executor.add_node(bangun_node)
     executor.add_node(button_node)
     # executor.add_node(kick_control)
     
@@ -64,7 +63,7 @@ def main(args=None):
         main_node.destroy_node()
         # head_control.destroy_node()
         jarak.destroy_node()
-        # bangun_node.destroy_node()
+        bangun_node.destroy_node()
         button_node.destroy_node()
         # kick_control.destroy_node()
         rclpy.shutdown()

@@ -33,7 +33,7 @@ class VisionYolo(Node):
         # )
 
         self.model = YOLO(
-            "/home/aroc/main_task26/main_task26/model/best_openvino_model",
+            "main_task26/model/yolo26_int8_openvino_model",
             task="detect"
         )
 

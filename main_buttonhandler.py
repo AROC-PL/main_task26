@@ -6,7 +6,7 @@ from std_msgs.msg import String, Int32
 from geometry_msgs.msg import Twist
 
 from main_task26.crab_walk import GaitController
-from .main_action import FallRecoveryFull
+# from .main_action import FallRecoveryFull
 from .main_head_control import HeadControl
 
 
@@ -20,7 +20,7 @@ class ButtonSoccerNode(GaitController):
       - mode  : Toggle soccer / walking module
     """
 
-    def __init__(self):
+    def __init__(self):                                                                                                              
         super().__init__(node_name='button_soccer_node')
 
         self.create_subscription(
@@ -42,12 +42,13 @@ class ButtonSoccerNode(GaitController):
         self.is_walking = False
         self.current_mode = 'walking'
         self.diagonal_timer = None
+        self.robot_state = "NORMAL"
 
         self.get_logger().info('Button Controller Ready')
 
         self.last_press_time = 0
         self.double_click = 0.5
-        self.current_mode = None
+        # self.current_mode = None
 
     # ------------------------------------------------------------------ #
     #  Module helpers                                                       #
@@ -142,7 +143,7 @@ class ButtonSoccerNode(GaitController):
             time.sleep(0.5)  # kasih waktu module aktif
 
             page = Int32()
-            page.data = 15  # page init pose
+            page.data = 9  # page init pose
             self.action_pub.publish(page)
 
             self.is_walking = False
@@ -165,7 +166,7 @@ class ButtonSoccerNode(GaitController):
         self.current_mode = 'walking'
         self.start_diagonal_mode()
         self.executor.add_node(GaitController())  
-        self.executor.add_node(FallRecoveryFull())
+        # self.executor.add_node(FallRecoveryFull())
 
 def main(args=None):
     rclpy.init(args=args)
