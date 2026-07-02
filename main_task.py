@@ -60,7 +60,7 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        button_node.stop_all()
+        # button_node.stop_all()
         executor.shutdown()   
         main_node.destroy_node()
         # head_control.destroy_node()

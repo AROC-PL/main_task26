@@ -51,7 +51,7 @@ class FallRecoveryFull(Node):
 
         self.create_timer(0.2, self.kick)
                 
-
+        
         # 🔥 GLOBAL STATE
         self.state_pub = self.create_publisher(
             String, '/communication/robot_state', 10)
@@ -195,7 +195,7 @@ class FallRecoveryFull(Node):
         self.kick_last_time = time.time()
         self.publish_state("NORMAL")
 
-        # self.start_walking()
+        self.start_walking()
 
         if self._reset_timer:
             self._reset_timer.cancel()

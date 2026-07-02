@@ -34,7 +34,7 @@ class ButtonSoccerNode(GaitController):
         
         self.create_subscription(
             String,
-            '/robot_state',
+            'communication/robot_state',
             self.state_callback,
             10
         )

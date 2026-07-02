@@ -8,7 +8,6 @@ import json
 HEAD_PAN  = 0
 HEAD_TILT = 1
 
-
 class HeadControl(Node):
     """
     Head tracking + scan node.
@@ -51,6 +50,7 @@ class HeadControl(Node):
 
         self.head_pub = self.create_publisher(
             JointState, '/robotis/head_control/set_joint_states', 10)
+
 
         # ── PID ──────────────────────────────────────────────────────────
         self.pid = [PIDControl() for _ in range(2)]

@@ -19,20 +19,14 @@ KIRI              = -0.1
 
 
 
-class ActionPublisParam ():
+class ActionPublisParam(Node):
     def __init__(self):                                                                                                              
         super().__init__(node_name='button_soccer_node')
 
-        self.walking_vel_pub = self.create_publisher(
-            Twist, '/robotis/walking/velocity', 10)
+        self.walking_vel_pub = self.create_publisher(Twist, '/robotis/walking/velocity', 10)
+        self.walking_param_pub = self.create_publisher(WalkingParam, '/robotis/walking/set_params', 10)
+        self.module_pub = self.create_publisher(String, '/robotis/enable_ctrl_module', 10)
         
-        self.action_pub = self.create_publisher(
-            Int32,'/robotis/action/page_num', 10)
-        self.walking_param_pub = self.create_publisher(
-            WalkingParam,
-            '/robotis/walking/set_params',
-            10
-        )
         self.create_subscription(
             JointState,
             '/robotis/goal_joint_states',
@@ -46,9 +40,81 @@ class ActionPublisParam ():
             self.state_callback,
             10
         )
+        self.walking_vel_pub = self.create_publisher(
+            Twist, '/robotis/walking/velocity', 10)
+        
+        self.action_pub = self.create_publisher(
+            Int32,'/robotis/action/page_num', 10)
+    
+        self.walking_command_pub = self.create_publisher(
+            String,
+            '/robotis/walking/command',
+            10
+        )
+        self.state_pub = self.create_publisher(
+            String, '/communication/robot_state', 
+            10)
+        
+        self.module_pub = self.create_publisher(
+            String,
+            '/robotis/enable_ctrl_module',
+            10
+        )
+
+
+        self.acc_buffer = []
 
         self.derajat_kamera = 0.0
         self.get_logger().info('button_soccer_node GaitController siap.')
+
+
+    def start_recovery(self, page):
+        self.is_running = True
+        # if self.is_walking:
+        #     self.stop_walking()
+        # 🔥 publish state
+        self.publish_state("RECOVER")
+        
+        time.sleep(0.3)
+
+        # aktifkan action module
+        self.action_param("action_module")
+        time.sleep(0.5)  # kasih waktu module aktif
+        # kirim action
+        self.init_pose(page)
+
+        # setelah sedikit delay → balik ke head module
+        # self.create_timer(0.5, lambda: self.publish_state("NORMAL"))
+
+        # timer selesai recovery
+        if self._reset_timer:
+            self._reset_timer.cancel()
+
+        self._reset_timer = self.create_timer(
+            ACTION_DURATION,
+            self.finish_recovery
+        )
+
+    def start_walking(self):
+        self.walking_param("start")
+        twist = Twist()
+        twist.linear.x = 0.03
+        self.walking_vel_pub.publish(twist)
+        self.is_walking = True
+
+    def finish_recovery(self):
+        self.get_logger().info("Recovery selesai → balik NORMAL")
+
+        self.is_running = False
+        self.kick_last_time = time.time()
+        self.publish_state("NORMAL")
+        
+        time.sleep(1.0)  
+        self.start_walking()
+
+        if self._reset_timer:
+            self._reset_timer.cancel()
+            self._reset_timer = None
 
     def imu_callback(self, msg: Imu):
         acc_x = msg.linear_acceleration.x
@@ -58,7 +124,7 @@ class ActionPublisParam ():
             self.acc_buffer.pop(0)
 
         avg_acc_x = sum(self.acc_buffer) / len(self.acc_buffer)
-
+        
         if self.is_running:
             return
 
@@ -102,7 +168,7 @@ class ActionPublisParam ():
         param.p_gain = 0
         return param  
 
-    def walking_param(self, Param):
+    def walking_param(self, Param):   #walkingparam untuk start 
         cmd = String()
         cmd.data = Param
         self.walking_command_pub.publish(cmd)
@@ -110,7 +176,7 @@ class ActionPublisParam ():
     def action_param(self, Param):
         cmd = String()
         cmd.data = Param
-        self.action_command_pub.publish(cmd)
+        self.module_pub.publish(cmd)
 
     def send_param(self, x=0.0, y=0.0, yaw=0.0):
         param = self.create_param(x, y, yaw)
@@ -121,13 +187,16 @@ class ActionPublisParam ():
         self.robot_state = msg.data
         if self.robot_state == "RECOVER" or self.robot_state == "KICK":
             self.action_param("stop")
-        elif self.robot_state == "NORMAL":
-            self.start_all()
+        # elif self.robot_state == "NORMAL":
+        #     self.start_all()
 
     def init_pose(self, action_page):
-        self.get_logger().info(f'Memulai pose inisialisasi: {action_page}')
         page = Int32()
-        page.data = action_page
+        page.data = int(action_page)
         self.action_pub.publish(page)
-        time.sleep(ACTION_DURATION)
-        
+
+    def publish_state(self, state):
+        msg = String()
+        msg.data = state
+        self.state_pub.publish(msg)
+    
