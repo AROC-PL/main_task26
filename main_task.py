@@ -10,11 +10,14 @@ from .jarak import JarakCalculation
 from .kick_useless import KickDecision
 # from .main_vision import VisionYolo
 from .sec_buttonhandler import SecButtonSoccerNode
+from .sec_action import ActionPublisParam
 
 
 class MainTask(Node):
     def __init__(self):
         super().__init__('main_task_node')
+
+        self.action = ActionPublisParam()
 
         self.create_subscription(
             Float32,
@@ -48,8 +51,10 @@ def main(args=None):
     jarak = JarakCalculation()
     # button_node = ButtonSoccerNode()
     button_node = SecButtonSoccerNode()
+    # executor.add_node(self.action.imu)
     executor.add_node(main_node)
     # executor.add_node(head_control)
+    
     executor.add_node(jarak)
     # executor.add_node(bangun_node)
     executor.add_node(button_node)

@@ -33,6 +33,12 @@ class ActionPublisParam(Node):
             self.joint_callback,
             10
         )
+        self.create_subscription(
+            Imu,
+            '/robotis/open_cr/imu',
+            self.imu_callback,
+            10
+        )
         
         self.create_subscription(
             String,
@@ -60,13 +66,20 @@ class ActionPublisParam(Node):
             '/robotis/enable_ctrl_module',
             10
         )
-
+        
+        self.walking_state = "stop"
+        self.is_running = False
 
         self.acc_buffer = []
 
         self.derajat_kamera = 0.0
         self.get_logger().info('button_soccer_node GaitController siap.')
 
+    def set_walking_state(self, state):
+        if state == "Jalan":
+            self.is_running = True
+        elif state == "Stop_jalan":
+            self.is_running = False
 
     def start_recovery(self, page):
         self.is_running = True
@@ -95,12 +108,15 @@ class ActionPublisParam(Node):
             self.finish_recovery
         )
 
+
     def start_walking(self):
         self.walking_param("start")
         twist = Twist()
         twist.linear.x = 0.03
         self.walking_vel_pub.publish(twist)
-        self.is_walking = True
+
+    def stop_walking(self):
+        self.walking_param("stop")
 
     def finish_recovery(self):
         self.get_logger().info("Recovery selesai → balik NORMAL")
@@ -108,7 +124,7 @@ class ActionPublisParam(Node):
         self.is_running = False
         self.kick_last_time = time.time()
         self.publish_state("NORMAL")
-        
+
         time.sleep(1.0)  
         self.start_walking()
 
@@ -118,6 +134,7 @@ class ActionPublisParam(Node):
 
     def imu_callback(self, msg: Imu):
         acc_x = msg.linear_acceleration.x
+        self.get_logger().warn(f"IMU Acceleration X: {acc_x:.2f} m/s²")
 
         self.acc_buffer.append(acc_x)
         if len(self.acc_buffer) > FILTER_SIZE:
@@ -132,6 +149,7 @@ class ActionPublisParam(Node):
             self.is_running = True
             self.get_logger().warn("Jatuh terdeteksi, memulai recovery...")
             self.action_param("stop")
+            time.sleep(0.2)  # kasih waktu module aktif
             if avg_acc_x < -THRESHOLD:
                 self.get_logger().warn("Jatuh DEPAN")
                 self.start_recovery(ACTION_PAGE_FRONT)

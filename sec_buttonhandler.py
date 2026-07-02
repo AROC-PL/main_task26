@@ -1,3 +1,4 @@
+
 import time
 
 import rclpy
@@ -20,17 +21,14 @@ class SecButtonSoccerNode(Node):
         self.action_pub = self.create_publisher(
             Int32,'/robotis/action/page_num', 10)
         
-        # self.create_subscription(
-        #     String,
-        #     '/robot_state',
-        #     self.state_callback,
-        #     10
-        # )
+        
         self.get_logger().info('Secondary Button Controller Ready')
         self.is_walking = False
+        self.is_posisi = False
         self.current_mode = 'walking'
         self.double_click = 0.5
         self.last_press_time = 0
+
 
     def button_callback(self, msg: String):
         button = msg.data
@@ -42,30 +40,39 @@ class SecButtonSoccerNode(Node):
             self.get_logger().info('MODE → Walking Mode')
             # self.enable_walking_mode()  
         elif button == 'start':
-            if now - self.last_press_time < self.double_click:
-                # self.stop_all()
-                self.current_mode = None
-                self.last_press_time = 0
-                return
-                      
-            self.last_press_time = now
-            self.get_logger().info('START → Jalan Diagonal')
-            self.action.action_param("walking_module")
-            time.sleep(0.5)  # kasih waktu module aktif
-            self.action.start_walking()
-            # self.stop_all()
-            # self.start_all()
+            
+
+            if self.is_walking == True:
+                self.get_logger().info('START → Stop Walking')
+                self.action.stop_walking()
+                self.is_walking = False
+                self.action.set_walking_state("Stop_jalan")   
+            else:      
+                self.last_press_time = now
+                self.get_logger().info('START → Jalan Diagonal')
+                self.action.action_param("walking_module")
+                time.sleep(0.5)  # kasih waktu module aktif
+                self.action.start_walking()
+                self.action.set_walking_state("Jalan")
+                self.is_walking = True
+
         elif button == 'user':
-            # self.stop_all()
-            self.get_logger().info("USER pressed → Init Pose")
-            # if self.is_walking:
-            #     self.stop_walking()
-            self.action.action_param("action_module")
 
-            time.sleep(0.5)  # kasih waktu module aktif
-            self.action.init_pose(9)  # page init pose
+            if self.is_posisi == True:
+                self.get_logger().info("USER pressed → Init Pose")
+                self.action.action_param("action_module")
+                time.sleep(0.5)  # kasih waktu module aktif
+                self.action.init_pose(9)  # page init pose
+                self.is_posisi = False
+            else:
+                self.get_logger().info("USER pressed → bringup pose")
+                self.action.action_param("action_module")
+                time.sleep(0.5)  
+                self.action.init_pose(15)  # 
+                self.is_posisi = True
 
-            self.is_walking = False
+
+            
         
     
     
