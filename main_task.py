@@ -9,6 +9,7 @@ from .main_head_control import HeadControl
 from .jarak import JarakCalculation
 from .kick_useless import KickDecision
 # from .main_vision import VisionYolo
+from .sec_buttonhandler import SecButtonSoccerNode
 
 
 class MainTask(Node):
@@ -39,17 +40,18 @@ def main(args=None):
     #vision main vision jangan taruh sini 
     executor = MultiThreadedExecutor()
     main_node = MainTask()
-    bangun_node = FallRecoveryFull()
+    # bangun_node = FallRecoveryFull()
     # button_node = ButtonSoccerNode()
     # head_control = HeadControl()
     # kick_control = KickDecision()
 
     jarak = JarakCalculation()
-    button_node = ButtonSoccerNode()
+    # button_node = ButtonSoccerNode()
+    button_node = SecButtonSoccerNode()
     executor.add_node(main_node)
     # executor.add_node(head_control)
     executor.add_node(jarak)
-    executor.add_node(bangun_node)
+    # executor.add_node(bangun_node)
     executor.add_node(button_node)
     # executor.add_node(kick_control)
     
@@ -63,7 +65,7 @@ def main(args=None):
         main_node.destroy_node()
         # head_control.destroy_node()
         jarak.destroy_node()
-        bangun_node.destroy_node()
+        # bangun_node.destroy_node()
         button_node.destroy_node()
         # kick_control.destroy_node()
         rclpy.shutdown()

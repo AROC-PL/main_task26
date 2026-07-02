@@ -5,7 +5,7 @@ from rclpy.node import Node
 from std_msgs.msg import String, Int32
 from geometry_msgs.msg import Twist
 
-from main_task26.crab_walk import GaitController
+from .crab_walk import GaitController
 # from .main_action import FallRecoveryFull
 from .main_head_control import HeadControl
 
@@ -82,7 +82,7 @@ class ButtonSoccerNode(GaitController):
         elif self.robot_state == "NORMAL":
             self.start_all()
 
-    def stop_walking(self):
+    def stop_walking(self,Param):
         if not self.is_walking:
             return
         cmd = String()
@@ -91,7 +91,7 @@ class ButtonSoccerNode(GaitController):
         self.is_walking = False
 
     # ------------------------------------------------------------------ #
-    #  Diagonal mode                                                       #
+    #  Diagonal mode                                                     #
     # ------------------------------------------------------------------ #
 
     def start_diagonal_mode(self):
@@ -128,8 +128,6 @@ class ButtonSoccerNode(GaitController):
         
             self.stop_all()
             self.start_all()
-                
-
         elif button == 'user':
             self.stop_all()
             self.get_logger().info("USER pressed → Init Pose")
@@ -147,8 +145,6 @@ class ButtonSoccerNode(GaitController):
             self.action_pub.publish(page)
 
             self.is_walking = False
-
-
         elif button == 'mode':
             self.stop_all()
 
