@@ -147,7 +147,7 @@ class ActionPublisParam(Node):
 
         self.is_running = False
         self.is_recovery = False
-        
+
         self.kick_last_time = time.time()
         self.publish_state("NORMAL")
 

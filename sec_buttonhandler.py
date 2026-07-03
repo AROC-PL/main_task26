@@ -20,14 +20,12 @@ class SecButtonSoccerNode(Node):
         self.action_pub = self.create_publisher(
             Int32,'/robotis/action/page_num', 10)
         
-        
         self.get_logger().info('Secondary Button Controller Ready')
         self.is_walking = False
         self.is_posisi = False
         self.current_mode = 'walking'
         self.double_click = 0.5
         self.last_press_time = 0
-
 
     def button_callback(self, msg: String):
         button = msg.data
@@ -56,7 +54,6 @@ class SecButtonSoccerNode(Node):
                 self.action.start_recovery()
 
         elif button == 'user':
-
             if self.is_posisi == False:
                 self.get_logger().info("USER pressed → Init Pose")
                 self.action.action_param("action_module")
