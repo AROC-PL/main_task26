@@ -21,7 +21,7 @@ class ButtonSoccerNode(GaitController):
     """
 
     def __init__(self):                                                                                                              
-        super().__init__(node_name='button_soccer_node')
+        super().__init__(node_name='Sec_button_soccer_node')
 
         self.create_subscription(
             String, '/robotis/open_cr/button', self.button_callback, 10)

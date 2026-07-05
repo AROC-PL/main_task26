@@ -4,7 +4,7 @@ from rclpy.executors import MultiThreadedExecutor
 from std_msgs.msg import String, Float32
 
 from .main_action import FallRecoveryFull
-from .main_buttonhandler import ButtonSoccerNode
+# from .main_buttonhandler import ButtonSoccerNode
 from .main_head_control import HeadControl
 from .jarak import JarakCalculation
 from .kick_useless import KickDecision
@@ -27,7 +27,7 @@ class MainTask(Node):
         )
 
         self.jarak_bola = 0.0
-        self.get_logger().info('MainTask Node Started')
+        self.get_logger().info('MainTask Node Started fasah kakak nya ilmi ')
 
     def jarak_callback(self, msg):
         self.jarak_bola = msg.data
@@ -47,11 +47,13 @@ def main(args=None):
     # button_node = ButtonSoccerNode()
     # head_control = HeadControl()
     # kick_control = KickDecision()
+    action_node = ActionPublisParam()
 
     jarak = JarakCalculation()
     # button_node = ButtonSoccerNode()
     button_node = SecButtonSoccerNode()
-    # executor.add_node(self.action.imu)
+    
+    executor.add_node(action_node)
     executor.add_node(main_node)
     # executor.add_node(head_control)
     
@@ -68,6 +70,7 @@ def main(args=None):
         # button_node.stop_all()
         executor.shutdown()   
         main_node.destroy_node()
+        action_node.destroy_node()
         # head_control.destroy_node()
         jarak.destroy_node()
         # bangun_node.destroy_node()

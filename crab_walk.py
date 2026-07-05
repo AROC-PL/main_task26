@@ -46,7 +46,7 @@ class GaitController(Node):
         )
 
         self.derajat_kamera = 0.0
-        self.get_logger().info(f'[{node_name}] GaitController siap.')
+        self.get_logger().info(f'[{node_name}] GaitController siap!!!!!!!!.')
 
     def joint_callback(self, msg: JointState):
         for i, name in enumerate(msg.name):

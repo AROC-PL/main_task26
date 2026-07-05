@@ -69,6 +69,8 @@ class ActionPublisParam(Node):
         
         self.walking_state = "stop"
         self.is_running = False
+        self._reset_timer = None
+        self.is_recovery = False
 
         self.acc_buffer = []
 
@@ -122,11 +124,16 @@ class ActionPublisParam(Node):
         self.get_logger().info("Recovery selesai → balik NORMAL")
 
         self.is_running = False
+        self.is_recovery = True
+
         self.kick_last_time = time.time()
         self.publish_state("NORMAL")
 
-        time.sleep(1.0)  
+        self.action_param("walking_module") 
+        time.sleep(0.5)  # kasih waktu module aktif 
         self.start_walking()
+        self.set_walking_state("Jalan")
+        self.is_walking = True
 
         if self._reset_timer:
             self._reset_timer.cancel()
@@ -134,7 +141,7 @@ class ActionPublisParam(Node):
 
     def imu_callback(self, msg: Imu):
         acc_x = msg.linear_acceleration.x
-        self.get_logger().warn(f"IMU Acceleration X: {acc_x:.2f} m/s²")
+        # self.get_logger().warn(f"IMU Acceleration X: {acc_x:.2f} m/s²")
 
         self.acc_buffer.append(acc_x)
         if len(self.acc_buffer) > FILTER_SIZE:
@@ -145,7 +152,7 @@ class ActionPublisParam(Node):
         if self.is_running:
             return
 
-        if acc_x < -THRESHOLD or acc_x > THRESHOLD:
+        if avg_acc_x < -THRESHOLD or acc_x > THRESHOLD:
             self.is_running = True
             self.get_logger().warn("Jatuh terdeteksi, memulai recovery...")
             self.action_param("stop")
@@ -217,4 +224,3 @@ class ActionPublisParam(Node):
         msg = String()
         msg.data = state
         self.state_pub.publish(msg)
-    
